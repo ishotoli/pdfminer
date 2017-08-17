@@ -144,7 +144,8 @@ class UnicodeMap(CMapBase):
     def get_unichr(self, cid):
         if self.debug:
             logging.debug('get_unichr: %r, %r' % (self, cid))
-        return self.cid2unichr[cid]
+        ret = self.cid2unichr[cid] #fix when cmap contains multi unicode on one character
+        return ret[0]
 
     def dump(self, out=sys.stdout):
         for (k, v) in sorted(self.cid2unichr.iteritems()):
@@ -303,7 +304,7 @@ class CMapParser(PSStackParser):
     KEYWORD_ENDBFCHAR = KWD(b'endbfchar')
     KEYWORD_BEGINNOTDEFRANGE = KWD(b'beginnotdefrange')
     KEYWORD_ENDNOTDEFRANGE = KWD(b'endnotdefrange')
-    
+
     def do_keyword(self, pos, token):
         if token is self.KEYWORD_BEGINCMAP:
             self._in_cmap = True
