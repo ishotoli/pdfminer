@@ -145,6 +145,9 @@ class UnicodeMap(CMapBase):
         if self.debug:
             logging.debug('get_unichr: %r, %r' % (self, cid))
         ret = self.cid2unichr[cid] #fix when cmap contains multi unicode on one character
+        for c in ret:
+            if c>=u'\u4E00' and c<=u'\u9FBF': #如果是中文，只需要CJK统一编码，其他编码都不需要
+                return c
         return ret[0]
 
     def dump(self, out=sys.stdout):
